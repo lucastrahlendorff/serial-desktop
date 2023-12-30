@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <div id="app">
+    <h1>Test</h1>
+    <PortSelector></PortSelector>
   </div>
 </template>
 
@@ -13,3 +15,11 @@ onMounted(() => {
   console.log('fs:', fs)
 })
 </script>
+
+<style>
+
+  #app {
+    padding: 1em;
+  }
+
+</style>
