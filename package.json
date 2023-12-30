@@ -1,0 +1,14 @@
+{
+  "name": "serial-desktop",
+  "version": "1.0.0",
+  "main": "main.js",
+  "repository": "https://github.com/lucastrahlendorff/serial-desktop.git",
+  "author": "Luca Strahlendorff <luca.strahlendorff@outlook.de>",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^28.1.0"
+  }
+}
