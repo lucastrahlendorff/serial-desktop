@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <PortSelector :connected="connected" @toggle-connection="toggleConnection"></PortSelector>
-    <Monitor></Monitor>
+    <Monitor :buffer="buffer"></Monitor>
   </div>
 </template>
 
@@ -15,7 +15,6 @@ const connected = ref(false)
 const buffer = ref(["", "", "", "", ""])
 
 function toggleConnection(port, baudRate) {
-  console.log("To: ", port, baudRate)
   let path = port.path
   if (connected.value) {
       window.connection.close()
@@ -43,6 +42,7 @@ function toggleConnection(port, baudRate) {
 }
 
 function handleData(newData) {
+  console.log(newData)
   let list = buffer.value
   list.push(newData)
   list.shift()

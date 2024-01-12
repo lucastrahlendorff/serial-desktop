@@ -1,4 +1,5 @@
 <script setup>
+defineEmits(['toggleConnection'])
 
 const props = defineProps(['connected'])
 
