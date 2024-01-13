@@ -4,6 +4,8 @@ const props = defineProps(['connected', 'name', 'value', 'type', 'options'])
 
 const emit = defineEmits(['setVar'])
 
+const types = ['text', 'number', 'toggle']
+
 const name = ref(props.name)
 const value = ref(props.value)
 const type = ref(props.type)
@@ -21,7 +23,7 @@ const valueBoolean = ref(false)
 
 function sendData() {
     switch (type.value) {
-        case 'boolean':
+        case 'toggle':
             emit('setVar', name.value, valueBoolean.value ? valueOn.value : valueOff.value)
             break
     
@@ -52,16 +54,22 @@ function sendData() {
                 <div v-if="viewOptions" class="mt-2">
                     <UCheckbox v-model="viewSlider" label="Slider" />
                     <div v-if="viewSlider" class="flex items-center gap-2 mt-2">
-                        Min:
-                        <UInput v-model="min" type="number" placeholder="0"/>
-                        Max:
-                        <UInput v-model="max" type="number" placeholder="100"/>
-                        Step:
-                        <UInput v-model="step" type="number" placeholder="1"/>
+                        <div>
+                            Min:
+                            <UInput v-model="min" type="number" placeholder="0"/>
+                        </div>
+                        <div>
+                            Max:
+                            <UInput v-model="max" type="number" placeholder="100"/>
+                        </div>
+                        <div>
+                            Step:
+                            <UInput v-model="step" type="number" placeholder="1"/>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div v-else-if="type === 'boolean'">
+            <div v-else-if="type === 'toggle'">
                 <UToggle :model-value="valueBoolean" @update:model-value="(newValue) => { valueBoolean = newValue; sendData() }" />
                 <div v-if="viewOptions" class="flex items-center mt-2 gap-2">
                     Off: 
@@ -72,6 +80,10 @@ function sendData() {
             </div>
             <div v-else>
                 Unknown type
+            </div>
+            <div v-if="viewOptions" class="flex items-center mt-2 gap-2">
+                Type: 
+                <USelectMenu v-model="type" :options="types" class="flex-1" />
             </div>
         </div>
 
