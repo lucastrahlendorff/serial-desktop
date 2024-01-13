@@ -1,14 +1,16 @@
 <script setup>
 
-const props = defineProps(['connected', 'name', 'value', 'type', 'options'])
+const props = defineProps(['connected', 'id', 'options'])
 
 const emit = defineEmits(['setVar'])
 
 const types = ['text', 'number', 'toggle']
 
-const name = ref(props.name)
-const value = ref(props.value)
-const type = ref(props.type)
+const view = useView()
+
+const name = ref(props.options.name)
+const value = ref(props.options.value)
+const type = ref(props.options.type)
 
 const viewOptions = ref(false)
 
@@ -16,10 +18,17 @@ const viewSlider = ref(false)
 const min = ref()
 const max = ref()
 const step = ref()
-
 const valueOff = ref(0)
 const valueOn = ref(1)
 const valueBoolean = ref(false)
+
+const propertiesToSave = ['name', 'type', 'value', 'viewSlider', 'min', 'max', 'step', 'valueOff', 'valueOn', 'valueBoolean'];
+
+propertiesToSave.forEach(property => {
+    watch(eval(property), (newValue) => {
+        view.setInputOption(props.id, property, newValue);
+    });
+});
 
 function sendData() {
     switch (type.value) {
@@ -38,6 +47,7 @@ function sendData() {
 <template>
     <div class="flex gap-2 items-center py-2">
         <UInput v-model="name" placeholder="Variable name" variant="none" class="flex-1"/>
+        
         <div class="flex-1">
             <div v-if="type === 'text'">
                 <UInput v-model="value" placeholder="Value" @keyup.enter="sendData"/>

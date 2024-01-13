@@ -6,7 +6,8 @@ const { ReadlineParser } = require('@serialport/parser-readline')
 
 const connected = ref(false)
 const buffer = ref(["", "", "", "", ""])
-const inputs = ref([{ id: '1', name: 'debug', type: 'boolean' }])
+
+const view = useView()
 
 function toggleConnection(port, baudRate) {
   let path = port.path
@@ -38,7 +39,7 @@ function handleData(newData) {
 }
 
 function writeSerial(data) {
-  if (connected) {
+  if (connected && window.connection) {
     window.connection.write(data, function(err) {
       if (err) {
         return console.error('Error on write: ', err.message)
@@ -62,22 +63,22 @@ function setVar(name, value) {
     <PortSelector :connected="connected" @toggle-connection="toggleConnection"></PortSelector>
     <UCard class="mt-4">
       <div class="flex flex-col divide-y divide-slate-700">
-        <Input v-for="element in inputs" @set-var="setVar" :connected="connected" :name="element.name" :type="element.type"></Input>
+        <Input v-for="[id, element] in view.inputElements.value" @set-var="setVar" :connected="connected" :id="id" :options="element"></Input>
         <div>
           <UButton
-            class="pt-2"
+            class="mt-4"
             icon="i-heroicons-plus"
             size="sm"
             block
             variant="link"
-            @click=""
+            @click="view.addInput"
           >Add input</UButton>
         </div>
       </div>
       
     </UCard>
     <Monitor :buffer="buffer"></Monitor>
-    {{ inputs }}
+    {{ view.inputElements }}
   </div>
 </template>
 
