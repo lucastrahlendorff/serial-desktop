@@ -1,9 +1,6 @@
 <script setup>
-defineEmits(['toggleConnection'])
 
-const props = defineProps(['connected'])
-
-const { SerialPort } = require('serialport')
+const serial = useSerial()
 
 const ports = ref([])
 const selectedPort = ref({})
@@ -15,7 +12,7 @@ onMounted(async () => {
 });
 
 async function refreshPorts() {
-    const list = await SerialPort.list()
+    const list = await serial.getPorts()
     ports.value = list
     selectedPort.value = list[0]
     setTimeout(refreshPorts, 7500)
@@ -38,7 +35,7 @@ async function refreshPorts() {
                 </USelectMenu>
             </div>
             <div class="flex-none">
-                <UButton @click="$emit('toggleConnection', selectedPort, +selectedBaudrate || +selectedBaudrate.label)" :color="connected ? 'red': 'green'">{{ connected ? 'Disconnect' : 'Connect' }}</UButton>
+                <UButton @click="serial.toggleConnection(selectedPort, +selectedBaudrate || +selectedBaudrate.label)" :color="serial.connected.value ? 'red': 'green'">{{ serial.connected.value ? 'Disconnect' : 'Connect' }}</UButton>
             </div>
         </div>
     </div>

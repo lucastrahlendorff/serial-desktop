@@ -1,12 +1,13 @@
 <script setup>
 
-const props = defineProps(['connected', 'id', 'options'])
+const props = defineProps(['id', 'options'])
 
 const emit = defineEmits(['setVar'])
 
 const types = ['text', 'number', 'toggle']
 
 const view = useView()
+const serial = useSerial()
 
 const name = ref(props.options.name)
 const value = ref(props.options.value)
@@ -33,13 +34,10 @@ propertiesToSave.forEach(property => {
 function sendData() {
     switch (type.value) {
         case 'toggle':
-            emit('setVar', name.value, valueBoolean.value ? valueOn.value : valueOff.value)
-            break
-    
-        default:
-            emit('setVar', name.value, value.value)
+            value.value = valueBoolean.value ? valueOn.value : valueOff.value
             break
     }
+    serial.setVar(name.value, value.value)
 }
 
 </script>
@@ -105,7 +103,7 @@ function sendData() {
             @click="viewOptions = !viewOptions"
         />
         
-        <UButton color="gray" @click="sendData" :disabled="!props.connected">Send</UButton>
+        <UButton color="gray" @click="sendData" :disabled="!serial.connected.value">Send</UButton>
 
     </div>
 </template>
