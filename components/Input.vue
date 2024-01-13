@@ -15,13 +15,13 @@ const type = ref(props.options.type)
 
 const viewOptions = ref(false)
 
-const viewSlider = ref(false)
-const min = ref()
-const max = ref()
-const step = ref()
-const valueOff = ref(0)
-const valueOn = ref(1)
-const valueBoolean = ref(false)
+const viewSlider = ref(props.options.viewSlider || false)
+const min = ref(props.options.min || 0)
+const max = ref(props.options.max || 100)
+const step = ref(props.options.step || 1)
+const valueOff = ref(props.options.valueOff || 0)
+const valueOn = ref(props.options.valueOn || 1)
+const valueBoolean = ref(props.options.valueBoolean || false)
 
 const propertiesToSave = ['name', 'type', 'value', 'viewSlider', 'min', 'max', 'step', 'valueOff', 'valueOn', 'valueBoolean'];
 

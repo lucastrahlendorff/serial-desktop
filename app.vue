@@ -3,6 +3,10 @@ import fs from 'node:fs'
 
 const view = useView()
 
+onMounted(() => {
+    view.getView()
+});
+
 </script>
 
 <template>
@@ -22,10 +26,8 @@ const view = useView()
           >Add input</UButton>
         </div>
       </div>
-      
     </UCard>
     <Monitor></Monitor>
-    {{ view.inputElements }}
   </div>
 </template>
 

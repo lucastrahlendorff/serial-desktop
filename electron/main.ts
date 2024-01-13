@@ -1,5 +1,6 @@
 import { app, BrowserWindow } from 'electron'
 import path from 'path'
+import Store from 'electron-store'
 
 // The built directory structure
 //
@@ -80,6 +81,8 @@ function bootstrap() {
   } else {
     win.loadFile(path.join(process.env.VITE_PUBLIC!, 'index.html'))
   }
+
+  Store.initRenderer()
 }
 
 app.whenReady().then(bootstrap)
