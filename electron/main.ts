@@ -88,7 +88,7 @@ function bootstrap() {
 
   Store.initRenderer()
 
-  win.setMenu(null)
+  // win.setMenu(null)
 }
 
 app.whenReady().then(bootstrap)

@@ -57,11 +57,45 @@ function sendData() {
                         {{ value }}
                     </div>
                     <URange v-model="value" :min="min" :max="max" :step="step" @change="sendData"/>
-                    
                 </div>
-                <div v-if="viewOptions" class="mt-2">
+            </div>
+            <div v-else-if="type === 'toggle'">
+                <UToggle :model-value="valueBoolean" @update:model-value="(newValue) => { valueBoolean = newValue; sendData() }" />
+            </div>
+            <div v-else>
+                Unknown type
+            </div>
+        </div>
+
+        <UButton
+            icon="i-heroicons-pencil-square"
+            size="sm"
+            square
+            variant="link"
+            @click="viewOptions = !viewOptions"
+        />
+
+        <UModal v-model="viewOptions" :ui="{ base: 'overflow-visible'}">
+            <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800', overflow: 'visible' }">
+                
+                <template #header>
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
+                        Edit input
+                        </h3>
+                        <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="viewOptions = false" />
+                    </div>
+                </template>
+
+                <div class="flex items-center mb-2 gap-2">
+                    Type: 
+                    <USelectMenu v-model="type" :options="types" class="flex-1" />
+                </div>
+
+                <!-- Number -->
+                <div v-if="type === 'number'">
                     <UCheckbox v-model="viewSlider" label="Slider" />
-                    <div v-if="viewSlider" class="flex items-center gap-2 mt-2">
+                    <div v-if="viewSlider" class="flex items-center gap-2 mt-1">
                         <div>
                             Min:
                             <UInput v-model="min" type="number" placeholder="0"/>
@@ -76,32 +110,25 @@ function sendData() {
                         </div>
                     </div>
                 </div>
-            </div>
-            <div v-else-if="type === 'toggle'">
-                <UToggle :model-value="valueBoolean" @update:model-value="(newValue) => { valueBoolean = newValue; sendData() }" />
-                <div v-if="viewOptions" class="flex items-center mt-2 gap-2">
-                    Off: 
-                    <UInput v-model="valueOff" placeholder="Value Off"/>
-                    On:
-                    <UInput v-model="valueOn" placeholder="Value On"/>
+                <!-- Toggle -->
+                <div v-else-if="type === 'toggle'">
+                    <div class="flex items-center gap-2">
+                        Value Off: 
+                        <UInput v-model="valueOff" placeholder="Value Off" class="flex-1"/>
+                        Value On:
+                        <UInput v-model="valueOn" placeholder="Value On" class="flex-1"/>
+                    </div>
                 </div>
-            </div>
-            <div v-else>
-                Unknown type
-            </div>
-            <div v-if="viewOptions" class="flex items-center mt-2 gap-2">
-                Type: 
-                <USelectMenu v-model="type" :options="types" class="flex-1" />
-            </div>
-        </div>
 
-        <UButton
-            :icon="viewOptions ? 'i-heroicons-check' : 'i-heroicons-pencil-square'"
-            size="sm"
-            square
-            variant="link"
-            @click="viewOptions = !viewOptions"
-        />
+                <template #footer>
+                    <div class="flex justify-between pb-2">
+                        <!-- <UButton color="red" variant="outline" icon="i-heroicons-trash" @click="viewOptions = false">Delete</UButton> -->
+                        <UButton icon="i-heroicons-check" @click="viewOptions = false">Close</UButton>
+                    </div>
+                </template>
+                
+            </UCard>
+        </UModal>
         
         <UButton color="gray" @click="sendData" :disabled="!serial.connected.value">Send</UButton>
 
