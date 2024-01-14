@@ -83,6 +83,8 @@ function bootstrap() {
   }
 
   Store.initRenderer()
+
+  win.setMenu(null)
 }
 
 app.whenReady().then(bootstrap)
