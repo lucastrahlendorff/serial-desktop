@@ -60,6 +60,11 @@ export function useView() {
         return id
     }
 
+    function deleteView(id) {
+        store.delete("view."+id)
+        switchTo(listViews()[0].id)
+    }
+
     function listViews() {
         let views = store.get("view");
         if (!views) {
@@ -84,5 +89,5 @@ export function useView() {
         }
     }
 
-    return { inputElements, addInput, deleteInput, setInputOption, saveView, createView, listViews, switchTo, renameTo, getLastActiveView, current_view, current_view_name };
+    return { inputElements, addInput, deleteInput, setInputOption, saveView, createView, deleteView, listViews, switchTo, renameTo, getLastActiveView, current_view, current_view_name };
 }

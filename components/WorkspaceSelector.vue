@@ -29,7 +29,12 @@ const options = [
   // }
   ], [{
     label: 'Delete',
-    icon: 'i-heroicons-trash-20-solid'
+    icon: 'i-heroicons-trash-20-solid',
+    click: () => {
+      view.deleteView(selected.value.id)
+      views.value = view.listViews()
+      selected.value = view.getLastActiveView()
+    }
   }]
 ]
 
