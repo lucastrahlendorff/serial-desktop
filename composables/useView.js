@@ -1,17 +1,15 @@
-const Store = require('electron-store');
+const Store = require('electron-store')
 
-const store = new Store();
-const inputElements = ref(new Map());
+const store = new Store()
+const inputElements = ref(new Map())
+const current_view = ref("")
 
 export function useView() {
+
     function addInput() {
         let id = crypto.randomUUID()
         inputElements.value.set(id, { name: 'yay', type: 'text' })
         saveView()
-    }
-
-    function getInput(id) {
-        return inputElements.value.get(id)
     }
 
     function setInputOption(id, key, value) {
@@ -24,15 +22,34 @@ export function useView() {
     }
 
     function saveView() {
-        store.set('view', { inputs: Object.fromEntries(inputElements.value) })
+        store.set('view.'+current_view.value+".elements", Object.fromEntries(inputElements.value))
     }
 
-    function getView() {
-        console.log('getView')
-        let view = store.get('view', inputElements.value)
-        console.log(view)
-        inputElements.value = new Map(Object.entries(view.inputs))
+    function switchTo(id) {
+        current_view.value = id
+        let view_ = store.get("view."+id)
+        inputElements.value = new Map()
+        nextTick(() => {
+            inputElements.value = new Map(Object.entries(view_.elements))
+        });
+    }
+    
+    function createView(name) {
+        let id = crypto.randomUUID()
+        current_view.value = id
+        store.set("view."+id, { name, elements: {} })
+        inputElements.value = new Map()
+        return id
     }
 
-    return { inputElements, addInput, getInput, setInputOption, getView, saveView };
+    function listViews() {
+        let views = store.get("view");
+        if (!views) {
+            createView("Default Workspace")
+            return listViews()
+        }
+        return Object.keys(views).map(id => ({ id, name: views[id].name }));
+    }
+
+    return { inputElements, addInput, setInputOption, saveView, createView, listViews, switchTo, current_view };
 }

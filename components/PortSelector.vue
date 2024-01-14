@@ -21,13 +21,13 @@ async function refreshPorts() {
 </script>
 
 <template>
-    <div class="grid grid-cols-6 gap-2">
-        <div class="sm:col-span-4 col-span-3">
+    <div class="flex gap-2">
+        <div class="flex-1">
             <USelectMenu v-model="selectedPort" :options="ports" option-attribute="path">
             </USelectMenu>
         </div>
-        <div class="sm:col-span-2 col-span-3 flex gap-2">
-            <div class="flex-1">
+        <div class="flex gap-2">
+            <div class="w-32">
                 <USelectMenu v-model="selectedBaudrate" :options="baudrateOptions" searchable creatable>
                     <template #option-create="{ option }">
                         <span class="flex-shrink-0">Use baudrate: {{ option.label }}</span>
