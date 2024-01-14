@@ -3,12 +3,13 @@ const Store = require('electron-store')
 const store = new Store()
 const inputElements = ref(new Map())
 const current_view = ref("")
+const current_view_name = ref("")
 
 export function useView() {
 
     function addInput() {
         let id = crypto.randomUUID()
-        inputElements.value.set(id, { name: 'yay', type: 'text' })
+        inputElements.value.set(id, { name: '', type: 'text' })
         saveView()
     }
 
@@ -25,9 +26,17 @@ export function useView() {
         store.set('view.'+current_view.value+".elements", Object.fromEntries(inputElements.value))
     }
 
+    function renameTo(name) {
+        current_view_name.value = name
+        store.set('view.'+current_view.value+".name", name)
+    }
+
     function switchTo(id) {
+        console.log("Switching to view", id)
         current_view.value = id
         let view_ = store.get("view."+id)
+        current_view_name.value = view_.name
+        store.set('active_view', id)
         inputElements.value = new Map()
         nextTick(() => {
             inputElements.value = new Map(Object.entries(view_.elements))
@@ -51,5 +60,20 @@ export function useView() {
         return Object.keys(views).map(id => ({ id, name: views[id].name }));
     }
 
-    return { inputElements, addInput, setInputOption, saveView, createView, listViews, switchTo, current_view };
+    function getLastActiveView() {
+        let id = store.get('active_view')
+        if (!id) {
+            let new_view = listViews()[0]
+            current_view.value = new_view.id
+            current_view_name.value = new_view.name
+            return listViews()[0]
+        } else {
+            let view_ = store.get("view."+id)
+            current_view.value = id
+            current_view_name.value = view_.name
+            return store.get('view')[id]
+        }
+    }
+
+    return { inputElements, addInput, setInputOption, saveView, createView, listViews, switchTo, renameTo, getLastActiveView, current_view, current_view_name };
 }
