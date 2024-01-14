@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, globalShortcut } from 'electron'
 import path from 'path'
 import Store from 'electron-store'
 
@@ -81,6 +81,10 @@ function bootstrap() {
   } else {
     win.loadFile(path.join(process.env.VITE_PUBLIC!, 'index.html'))
   }
+
+  globalShortcut.register('CommandOrControl+R', () => {
+    win.webContents.reloadIgnoringCache()
+  })
 
   Store.initRenderer()
 
