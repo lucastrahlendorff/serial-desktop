@@ -13,6 +13,15 @@ export function useView() {
         saveView()
     }
 
+    function deleteInput(id) {
+        let filtered = new Map([...inputElements.value.entries()].filter(([key]) => key !== id));
+        inputElements.value = new Map();
+        nextTick(() => {
+            inputElements.value = filtered
+        });
+        saveView()
+    }
+
     function setInputOption(id, key, value) {
         let inputElement = inputElements.value.get(id)
         if (inputElement) {
@@ -75,5 +84,5 @@ export function useView() {
         }
     }
 
-    return { inputElements, addInput, setInputOption, saveView, createView, listViews, switchTo, renameTo, getLastActiveView, current_view, current_view_name };
+    return { inputElements, addInput, deleteInput, setInputOption, saveView, createView, listViews, switchTo, renameTo, getLastActiveView, current_view, current_view_name };
 }

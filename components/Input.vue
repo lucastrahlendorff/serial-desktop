@@ -88,6 +88,11 @@ function sendData() {
                 </template>
 
                 <div class="flex items-center mb-2 gap-2">
+                    Name: 
+                    <UInput v-model="name" placeholder="Variable name" class="flex-1"/>
+                </div>
+
+                <div class="flex items-center mb-2 gap-2">
                     Type: 
                     <USelectMenu v-model="type" :options="types" class="flex-1" />
                 </div>
@@ -122,7 +127,7 @@ function sendData() {
 
                 <template #footer>
                     <div class="flex justify-between pb-2">
-                        <!-- <UButton color="red" variant="outline" icon="i-heroicons-trash" @click="viewOptions = false">Delete</UButton> -->
+                        <UButton color="red" variant="outline" icon="i-heroicons-trash" @click="view.deleteInput(props.id); viewOptions = false">Delete</UButton>
                         <UButton icon="i-heroicons-check" @click="viewOptions = false">Close</UButton>
                     </div>
                 </template>
