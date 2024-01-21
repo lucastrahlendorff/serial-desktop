@@ -26,6 +26,9 @@ function bootstrap() {
   win = new BrowserWindow({
     width: 800,
     height: 600,
+    minWidth: 650,
+    minHeight: 500,
+    autoHideMenuBar: true,
     webPreferences: {
       preload,
       nodeIntegrationInWorker: true,
@@ -88,7 +91,6 @@ function bootstrap() {
 
   Store.initRenderer()
 
-  // win.setMenu(null)
 }
 
 app.whenReady().then(bootstrap)
